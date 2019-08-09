@@ -10,9 +10,9 @@ reviews_data = pd.read_csv('Reviews.csv')
 # we will tune this params later
 MAX_LEN = 200
 TRAIN_SPLIT = 0.7
-NUM_WORDS = 300
-EMBED_SIZE = 1012
-LIMIT = 20000
+NUM_WORDS = 3000
+EMBED_SIZE = 56
+LIMIT = 90000
 
 # basic queries on the dataset
 big_text = reviews_data['Text'].head(LIMIT).to_numpy()
@@ -52,17 +52,17 @@ sgd = keras.optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 # Create the model
 model = keras.Sequential()
 model.add(keras.layers.Embedding(NUM_WORDS, EMBED_SIZE, input_length=MAX_LEN))
-model.add(keras.layers.LSTM(400)) 
-# model.add(keras.layers.Dense(50))
+model.add(keras.layers.LSTM(30)) 
+# model.add(keras.layers.Dense(20))
 model.add(keras.layers.Dense(1, activation='sigmoid'))
 
 # For a multi-class classification problem
-model.compile(optimizer='adam',
+model.compile(optimizer='RMSprop',
               loss='binary_crossentropy',
               metrics=["accuracy"]
               )
 
-model.fit(x_train, y_train, epochs=15, batch_size=32)
+model.fit(x_train, y_train, epochs=10, batch_size=1690)
 
 # Store our model and our tokenizer info
 with open('tokenizer.pickle', 'wb') as handle:
